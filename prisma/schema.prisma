@@ -1,15 +1,21 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client"
- 
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model empleado {
+  id         Int      @id @default(autoincrement())
+  nombre     String   @db.Char(50)
+  id_empresa Int?
+  empresa    empresa? @relation(fields: [id_empresa], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_empleado_empresa")
+}
+
+model empresa {
+  id       Int        @id @default(autoincrement())
+  nombre   String     @db.Char(50)
+  empleado empleado[]
 }
